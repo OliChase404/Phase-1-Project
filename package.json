@@ -1,0 +1,22 @@
+{
+    "name": "fridge-decrypter",
+    "version": "1.0.0",
+    "description": "recipe search app",
+    "main": "src/main.js",
+    "scripts": {
+      "start": "node src/main.js",
+      "dev": "echo This is the \"dev\" script running!",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Oli Chase",
+    "license": "MIT",
+    "dependencies": {
+      "express": "^4.17.1"
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/OliChase404/Phase-1-Project.git"
+    }
+    
+  }
+  
