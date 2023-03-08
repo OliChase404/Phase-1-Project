@@ -35,15 +35,6 @@ searchForm.addEventListener('submit', (event)=> {
 })
 
 
-function capFirstChar(str) {
-  return str[0].toUpperCase() + str.slice(1)
-  }
-
-function fetchReciSearch(){
-
-}
-
-
 // Fetch 20 random recipies and render them to the DOM
 function fetchRandomRecipes() {
   fetch(RAND_RECI_URL)
@@ -53,9 +44,56 @@ function fetchRandomRecipes() {
     console.log(reciDataArr)
     for(obj of reciDataArr){
       renderReciCard(obj)
-  }
+    }
   })
   .catch(error => console.error(`Fetch Error: ${error}`))
+}
+
+
+function capFirstChar(str) {
+  return str[0].toUpperCase() + str.slice(1)
+  }
+
+  function sortSearchTermsByType(arr1, arr2, arr3){
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr2.includes(arr1[i])) {
+        arr3.push(arr1[i])
+      }
+    }
+  }
+
+
+function fetchReciSearch(){
+  let searchURL = `${BASE_URL}?type=public&beta=false`
+
+  // Add all selcted search filter options to an array
+  const specifiedSearchTerms = []
+  for (const key in searchValues) {
+    if (searchValues.hasOwnProperty(key) && searchValues[key]) {
+      specifiedSearchTerms.push(key)
+    }
+  }
+  // Sort filter options by type and add to seperate arrays
+  const cuisineTypeSearchTerms = []
+  sortSearchTermsByType(specifiedSearchTerms, cuisineTypeArr, cuisineTypeSearchTerms)
+  const mealTypeSearchTerms = []
+  sortSearchTermsByType(specifiedSearchTerms, mealTypeArr, mealTypeSearchTerms)
+  const dishTypeSearchTerms = []
+  sortSearchTermsByType(specifiedSearchTerms, dishTypeArr, dishTypeSearchTerms)
+  const healthLabelSearchTerms = []
+  sortSearchTermsByType(specifiedSearchTerms, healthLabelArr,healthLabelSearchTerms)
+  const dietLabelSearchTerms = []
+  sortSearchTermsByType(specifiedSearchTerms, dietLabelArr, dietLabelSearchTerms)
+
+  // If a search query is spcified, add it to the URL
+  if(searchForm[0].value !== ''){
+    searchURL += `&q=${searchForm[0].value}`
+  }
+  searchURL += `&app_id=${R_API_ID}&app_key=${R_API_KEY}%20%09`
+  
+console.log(cuisineTypeSearchTerms)
+// console.log(searchURL)
+// console.log(specifiedSearchTerms)
 }
 
 
@@ -63,6 +101,8 @@ function renderSearchFilterListToSideBar(typeArr, listTitle){
   const typeList = document.createElement('ul')
   const listHeading = document.createElement('h3')
   listHeading.textContent = listTitle
+  listHeading.classList.add('filterListHeading')
+  typeList.appendChild(listHeading)
   for(let ele of typeArr){
     searchValues[ele] = false
     const listItem = document.createElement('li')
@@ -70,17 +110,17 @@ function renderSearchFilterListToSideBar(typeArr, listTitle){
     listItem.addEventListener('click', () => {
       if(searchValues[ele]){
         listItem.style.color = 'white'
+        listItem.style.border = ''
         searchValues[ele] = false
       } else {
         listItem.style.color = 'hotpink'
+        listItem.style.border = '2px solid hotpink'
         searchValues[ele] = true
       }
       console.log(searchValues)
     })
     listItem.classList.add('searchFilterListItem')
-    listHeading.appendChild(listItem)
-    listHeading.classList.add('filterListHeading')
-    typeList.appendChild(listHeading)
+    typeList.appendChild(listItem)
   }
   typeList.classList.add('searchFilterLists')
   filterSideBar.appendChild(typeList)

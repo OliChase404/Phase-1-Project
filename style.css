@@ -24,6 +24,9 @@ header{
 
 
 #filterSideBar{
+    user-select: none;
+    display: flex;
+    flex-direction: column;
     color: white;
     background-color: rgba(0, 0, 0, 0.397);
     /* border: 3px solid rgba(255, 255, 255, 0.795); */
@@ -31,16 +34,23 @@ header{
     width: 20%;
 }
 
-.filterListHeading{
-
-}
 
 .searchFilterLists{
+    /* justify-content: center; */
+    text-align: center;
+    list-style: none;
+    
+}
 
+.filterListHeading{
+    font-size: larger;
+    border: 2px solid rgba(255, 255, 255, 0.801);
 }
 
 .searchFilterListItem{
+    text-align: center;
     cursor: pointer;
+    margin-top: 0.6vh;
 }
 
 
