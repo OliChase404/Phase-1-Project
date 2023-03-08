@@ -42,6 +42,13 @@ function fetchRandomRecipes() {
 function renderReciCard(reciObj){
 
   const reciCard = document.createElement('div')
+  reciCard.addEventListener('mouseover',()=> {
+    reciCard.style.border = '5px solid hotpink'
+  })
+  reciCard.addEventListener('mouseout', ()=> {
+    reciCard.style.border = '3px solid rgba(255, 255, 255, 0.856)'
+  })
+
 
   const reciCardInfo = document.createElement('div')
 
@@ -81,16 +88,16 @@ function renderReciCard(reciObj){
     reciCardFootPrepTime.textContent = 'Prep Time: 30 Minutes'
   }else{reciCardFootPrepTime.textContent = `Prep Time: ${reciObj.recipe.totalTime} Minutes`}
 
-  const reciCardFootInfoBtn = document.createElement('button')
-  reciCardFootInfoBtn.textContent = ("Click Here for More Info")
-  reciCardFootInfoBtn.addEventListener('click',() =>{
-    window.open(reciObj.recipe.url)
-  })
+  // const reciCardFootInfoBtn = document.createElement('button')
+  // reciCardFootInfoBtn.textContent = ("Click Here for More Info")
+  // reciCardFootInfoBtn.addEventListener('click',() =>{
+  //   window.open(reciObj.recipe.url)
+  // })
 
   reciCardFoot.appendChild(reciCardFootDishType)
   reciCardFoot.appendChild(reciCardFootMealType)
   reciCardFoot.appendChild(reciCardFootPrepTime)
-  reciCardFoot.appendChild(reciCardFootInfoBtn)
+  // reciCardFoot.appendChild(reciCardFootInfoBtn)
 
   reciCardInfo.appendChild(reciCardList)
   reciCardInfo.appendChild(reciCardFoot)

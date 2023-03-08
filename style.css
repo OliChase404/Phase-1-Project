@@ -12,6 +12,7 @@ body{
 
 
 .reciCard{
+    cursor: pointer;
     background-color: #69cc00c7;
     border: 3px solid rgba(255, 255, 255, 0.856);
     color: rgb(255, 255, 255);
@@ -34,7 +35,6 @@ body{
     width: auto;
     height: 60%;
     object-fit: cover;
-
 
 }
 
@@ -60,7 +60,6 @@ body{
 }
 
 .reciCard footer{
-    border: 1px solid rgba(0, 0, 0, 0.26);
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -72,7 +71,7 @@ body{
     background-color: rgba(0, 0, 0, 0.185);
     border: 1px solid rgba(0, 0, 0, 0.034);
     padding: ;
-    width: 25%;
+    width: 33%;
 
 }
 .reciCard button{
