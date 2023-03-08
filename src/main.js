@@ -4,13 +4,27 @@ const RAND_RECI_URL = `https://api.edamam.com/api/recipes/v2?type=public&app_id=
 
 const searchForm = document.getElementById('searchForm')
 const reciMenu = document.getElementById('recipeMenu')
+const filterSideBar = document.getElementById('filterSideBar')
 
+const cuisineTypeArr = ['American', 'Asian', 'British', 'Caribbean', 'Central Europe', 'Chinese', 'Eastern Europe', 'French', 'Indian', 'Italian', 'Japanese', 'Kosher', 'Mediterranean', 'Mexican', 'Middle Eastern', 'Nordic', 'South American', 'South East Asian']
+const mealTypeArr = ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Teatime']
+const dishTypeArr = ['Biscuits and cookies', 'Bread', 'Cereals', 'Condiments and sauces', 'Desserts', 'Drinks', 'Main course', 'Pancake', 'Preps', 'Preserve', 'Salad', 'Sandwiches', 'Side dish', 'Soup', 'Starter', 'Sweets']
+const healthLabelArr = ['alcohol-cocktail', 'alcohol-free', 'dairy-free', 'egg-free', 'fish-free', 'gluten-free', 'keto-friendly', 'kosher', 'low-potassium', 'low-sugar', 'paleo', 'peanut-free', 'pescatarian', 'pork-free', 'red-meat-free', 'shellfish-free', 'soy-free', 'tree-nut-free', 'vegan', 'vegetarian']
+const dietLabelArr = ['balanced', 'high-fiber', 'high-protein', 'low-carb', 'low-fat', 'low-sodium']
+const searchValues = {}
 
 let reciDataArr = []
 
 //Initialise -----------------------------------------------
 
 fetchRandomRecipes()
+
+renderSearchFilterListToSideBar(cuisineTypeArr, 'Cuisine Type')
+renderSearchFilterListToSideBar(mealTypeArr, 'Meal Type')
+renderSearchFilterListToSideBar(dishTypeArr, 'Dish Type')
+renderSearchFilterListToSideBar(healthLabelArr, 'Health Labels')
+renderSearchFilterListToSideBar(dietLabelArr, 'Diet Labels')
+
 
 //--------------------------------------------------
 
@@ -26,7 +40,7 @@ function capFirstChar(str) {
   }
 
 function fetchReciSearch(){
-  
+
 }
 
 
@@ -44,6 +58,33 @@ function fetchRandomRecipes() {
   .catch(error => console.error(`Fetch Error: ${error}`))
 }
 
+
+function renderSearchFilterListToSideBar(typeArr, listTitle){
+  const typeList = document.createElement('ul')
+  const listHeading = document.createElement('h3')
+  listHeading.textContent = listTitle
+  for(let ele of typeArr){
+    searchValues[ele] = false
+    const listItem = document.createElement('li')
+    listItem.textContent = ele
+    listItem.addEventListener('click', () => {
+      if(searchValues[ele]){
+        listItem.style.color = 'white'
+        searchValues[ele] = false
+      } else {
+        listItem.style.color = 'hotpink'
+        searchValues[ele] = true
+      }
+      console.log(searchValues)
+    })
+    listItem.classList.add('searchFilterListItem')
+    listHeading.appendChild(listItem)
+    listHeading.classList.add('filterListHeading')
+    typeList.appendChild(listHeading)
+  }
+  typeList.classList.add('searchFilterLists')
+  filterSideBar.appendChild(typeList)
+}
 
 
 // Render one recipe to the DOM

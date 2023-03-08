@@ -23,12 +23,24 @@ header{
 }
 
 
-#sideBar{
+#filterSideBar{
     color: white;
     background-color: rgba(0, 0, 0, 0.397);
     /* border: 3px solid rgba(255, 255, 255, 0.795); */
     /* order: -1; */
     width: 20%;
+}
+
+.filterListHeading{
+
+}
+
+.searchFilterLists{
+
+}
+
+.searchFilterListItem{
+    cursor: pointer;
 }
 
 
