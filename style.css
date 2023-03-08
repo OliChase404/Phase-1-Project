@@ -1,4 +1,90 @@
 body{
-    background-color: black;
-    color: white;
+    background-color: rgb(255, 255, 255);
+    background-image: url('assets/christian-mackie-cc0Gg3BegjE-unsplash.jpg');
+    background-repeat: no-repeat;
+    background-attachment:fixed ;
+    background-size: cover;
+    color: rgb(0, 0, 0);
+
+    font-family: 'Source Sans Pro', sans-serif;
+
+}
+
+
+.reciCard{
+    background-color: #69cc00c7;
+    border: 3px solid rgba(255, 255, 255, 0.856);
+    color: rgb(255, 255, 255);
+    margin: 1vmin;
+    margin-bottom: 2vmin;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* position: relative; */
+
+    /* height: 18vh; */
+
+}
+
+.reciCard h2{
+    text-align: center;
+    /* height: 8vmin; */
+    position: absolute;
+    margin-left: 40%;
+    background-color: rgba(0, 0, 0, 0.185);
+    border: 2px solid white;
+    padding: 1vmin;
+    align-self: flex-start;
+    /* top: 0;
+    right: 0;
+    transform: translate(-50%, 50%); */
+
+}
+
+.reciCard img{
+    width: auto;
+    height: 60%;
+    object-fit: cover;
+
+}
+
+.reciCard ul{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    margin: 0;
+    padding: 0;
+    /* display: inline-block;
+    vertical-align: */
+    
+    /* text-align: center; */
+
+}
+
+.reciCard li{
+
+}
+
+.reciCard footer{
+    align-self: flex-end;
+    justify-self: flex-start;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+}
+
+.reciCard span{
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.185);
+    /* margin-left: 1vw;
+    margin-right: 1vw; */
+    width: 25%;
+
+}
+.reciCard button{
+    width: 25%;
+    background-color: white;
+
 }
