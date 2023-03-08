@@ -7,23 +7,31 @@
         <title>Fridge Decrypter</title>
         <link rel="stylesheet" type="text/css" href="style.css" >
         <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;1,200;1,300&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;1,200;1,300&display=swap" rel="stylesheet">
     </head>
         <body>
             <header>
-                <form>
+                <form id='searchForm'>
                     <label id="searchType">Search</label>
-                    <form id='searchForm'>
                       <input id='search' type='text' name='search'>
                       <input type='submit' name='submit'/>
                     </form>
             </header>
+          
+            <div id="main">
 
-            <div id="recipeMenu">
+                <div id="sideBar">
+                    Your Saved Recipes:
+                    <!-- Favorites Will Go Here. -->
+                </div>
 
+                <div id="recipeMenu">
+                    <!-- Recipe Cards are Rendered Here. -->
+                </div>
+             
             </div>
-                
+
         </body>
         <script defer src="src/secrets.js"></script>
         <script defer src="src/main.js"></script>

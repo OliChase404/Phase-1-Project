@@ -2,11 +2,11 @@
 const BASE_URL = `https://api.edamam.com/api/recipes/v2`
 const RAND_RECI_URL = `https://api.edamam.com/api/recipes/v2?type=public&app_id=${R_API_ID}&app_key=${R_API_KEY}&imageSize=LARGE&random=true`
 
-let reciDataArr = []
-
+const searchForm = document.getElementById('searchForm')
 const reciMenu = document.getElementById('recipeMenu')
 
 
+let reciDataArr = []
 
 //Initialise -----------------------------------------------
 
@@ -15,11 +15,19 @@ fetchRandomRecipes()
 //--------------------------------------------------
 
 
+searchForm.addEventListener('submit', (event)=> {
+  event.preventDefault()
+  fetchReciSearch()
+})
 
-function toTitleCase(str) {
+
+function capFirstChar(str) {
   return str[0].toUpperCase() + str.slice(1)
   }
 
+function fetchReciSearch(){
+  
+}
 
 
 // Fetch 20 random recipies and render them to the DOM
@@ -62,7 +70,7 @@ function renderReciCard(reciObj){
   const reciCardList = document.createElement('ul')
   
   const reciCardListCuType = document.createElement('li')
-  reciCardListCuType.textContent = `${toTitleCase(reciObj.recipe.cuisineType[0])} Cuisine`
+  reciCardListCuType.textContent = `${capFirstChar(reciObj.recipe.cuisineType[0])} Cuisine`
 
   const reciCardListDietLab = document.createElement('li')
   reciCardListDietLab.textContent = reciObj.recipe.dietLabels
@@ -78,10 +86,10 @@ function renderReciCard(reciObj){
   const reciCardFoot = document.createElement('footer')
 
   const reciCardFootDishType = document.createElement('span')
-  reciCardFootDishType.textContent = toTitleCase(reciObj.recipe.dishType[0])
+  reciCardFootDishType.textContent = capFirstChar(reciObj.recipe.dishType[0])
 
   const reciCardFootMealType = document.createElement('span')
-  reciCardFootMealType.textContent = toTitleCase(reciObj.recipe.mealType[0])
+  reciCardFootMealType.textContent = capFirstChar(reciObj.recipe.mealType[0])
 
   const reciCardFootPrepTime = document.createElement('span')
   if(reciObj.recipe.totalTime == 0){
