@@ -28,14 +28,14 @@ renderSearchFilterListToSideBar(dietLabelArr, 'Diet Labels')
 
 //--------------------------------------------------
 
-
+//----------------------------------------------------
 searchForm.addEventListener('submit', (event)=> {
   event.preventDefault()
   fetchReciSearch()
 })
+//---------------------------------------
 
-
-// Fetch 20 random recipies and render them to the DOM
+// Fetch 20 random recipies and render them to the DOM ---------------------------------
 function fetchRandomRecipes() {
   fetch(RAND_RECI_URL)
   .then(resp => resp.json())
@@ -48,24 +48,33 @@ function fetchRandomRecipes() {
   })
   .catch(error => console.error(`Fetch Error: ${error}`))
 }
+//---------------------------------------------------
 
-
+//-----------------------------------------------------------
 function capFirstChar(str) {
   return str[0].toUpperCase() + str.slice(1)
   }
+//-------------------------------------------------
 
-  function sortSearchTermsByType(arr1, arr2, arr3){
-    for (let i = 0; i < arr1.length; i++) {
-      if (arr2.includes(arr1[i])) {
-        arr3.push(arr1[i])
-      }
+//-----------------------------------------------------------------
+function sortSearchTermsByType(arr1, arr2, arr3){
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr2.includes(arr1[i])) {
+      arr3.push(arr1[i])
     }
   }
+}
+//---------------------------------------------
 
+//-----------------------------------------------------
+function clearRecipes(){
+  reciMenu.innerHTML = ''
+}
+//---------------------------------------------------
 
+// Run Search with user specified parameters -------------------------------------------------
 function fetchReciSearch(){
   let searchURL = `${BASE_URL}?type=public&beta=false`
-
   // Add all selcted search filter options to an array
   const specifiedSearchTerms = []
   for (const key in searchValues) {
@@ -78,25 +87,67 @@ function fetchReciSearch(){
   sortSearchTermsByType(specifiedSearchTerms, cuisineTypeArr, cuisineTypeSearchTerms)
   const mealTypeSearchTerms = []
   sortSearchTermsByType(specifiedSearchTerms, mealTypeArr, mealTypeSearchTerms)
-  const dishTypeSearchTerms = []
+  let dishTypeSearchTerms = []
   sortSearchTermsByType(specifiedSearchTerms, dishTypeArr, dishTypeSearchTerms)
   const healthLabelSearchTerms = []
   sortSearchTermsByType(specifiedSearchTerms, healthLabelArr,healthLabelSearchTerms)
   const dietLabelSearchTerms = []
   sortSearchTermsByType(specifiedSearchTerms, dietLabelArr, dietLabelSearchTerms)
-
+  // map dishTypeSearchTerms to replace all the spaces with %20
+  dishTypeSearchTerms = dishTypeSearchTerms.map((str) => {
+    return str.replace(/\s/g, '%20');
+  });
   // If a search query is spcified, add it to the URL
   if(searchForm[0].value !== ''){
     searchURL += `&q=${searchForm[0].value}`
   }
+  // Add API ID and Key to URL
   searchURL += `&app_id=${R_API_ID}&app_key=${R_API_KEY}%20%09`
-  
-console.log(cuisineTypeSearchTerms)
-// console.log(searchURL)
-// console.log(specifiedSearchTerms)
+  // Add diet labels if present
+  if(dietLabelSearchTerms !== []){
+    for(let ele of dietLabelSearchTerms){
+      searchURL += `&diet=${ele}`
+    }
+  }
+  // Add health labels if present
+  if(healthLabelSearchTerms !== []){
+    for(let ele of healthLabelSearchTerms){
+      searchURL += `&health=${ele}`
+    }
+  }
+  // Add cuisine type labels if present
+  if(cuisineTypeSearchTerms !== []){
+    for(let ele of cuisineTypeSearchTerms){
+      searchURL += `&cuisineType=${ele}`
+    }
+  }
+  // Add meal type labels if present
+  if(mealTypeSearchTerms !== []){
+    for(let ele of mealTypeSearchTerms){
+      searchURL += `&mealType=${ele}`
+    }
+  }
+  // Add dish type labels if present
+  if(dishTypeSearchTerms !== []){
+    for(let ele of dishTypeSearchTerms){
+      searchURL += `&dishType=${ele}`
+    }
+  }
+// Fetch with searchURL
+fetch(searchURL)
+.then(resp => resp.json())
+.then(data => {
+  reciDataArr = data.hits
+  clearRecipes()
+  for(obj of reciDataArr){
+    renderReciCard(obj)
+  }
+})
+.catch(error => console.error(`Fetch Error: ${error}`))
 }
+//-------------------------------------------------------------------------------
 
-
+//--------------------------------------------------------------------------------------
 function renderSearchFilterListToSideBar(typeArr, listTitle){
   const typeList = document.createElement('ul')
   const listHeading = document.createElement('h3')
@@ -125,9 +176,9 @@ function renderSearchFilterListToSideBar(typeArr, listTitle){
   typeList.classList.add('searchFilterLists')
   filterSideBar.appendChild(typeList)
 }
+//-----------------------------------------------------------------------
 
-
-// Render one recipe to the DOM
+// Render one recipe to the DOM ------------------------------------------------
 function renderReciCard(reciObj){
 
   const reciCard = document.createElement('div')
@@ -203,6 +254,7 @@ function renderReciCard(reciObj){
 
   reciMenu.appendChild(reciCard)
 }
+//--------------------------------------------------------------------
 
 
 
