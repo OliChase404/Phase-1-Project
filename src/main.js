@@ -40,11 +40,17 @@ function fetchRandomRecipes() {
 
 // Render one recipe to the DOM
 function renderReciCard(reciObj){
+
   const reciCard = document.createElement('div')
+
+  const reciCardInfo = document.createElement('div')
+
+  const reciImg = document.createElement('img')
+  reciImg.src = reciObj.recipe.images.REGULAR.url
+
 
   const reciTitle = document.createElement('h2')
   reciTitle.textContent = reciObj.recipe.label
-
 
   const reciCardList = document.createElement('ul')
   
@@ -86,16 +92,18 @@ function renderReciCard(reciObj){
   reciCardFoot.appendChild(reciCardFootPrepTime)
   reciCardFoot.appendChild(reciCardFootInfoBtn)
 
+  reciCardInfo.appendChild(reciCardList)
+  reciCardInfo.appendChild(reciCardFoot)
+  reciCardInfo.appendChild(reciTitle)
 
-  const reciImg = document.createElement('img')
-  reciImg.src = reciObj.recipe.images.REGULAR.url
 
-  reciCard.appendChild(reciTitle)
   reciCard.appendChild(reciImg)
-  reciCard.appendChild(reciCardList)
-  reciCard.appendChild(reciCardFoot)
+  reciCard.appendChild(reciCardInfo)
+  // reciCard.appendChild(reciCardList)
+  // reciCard.appendChild(reciCardFoot)
 
   reciCard.classList.add('reciCard')
+  reciCardInfo.classList.add('reciCardInfo')
 
   reciMenu.appendChild(reciCard)
 }
