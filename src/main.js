@@ -168,7 +168,6 @@ function renderSearchFilterListToSideBar(typeArr, listTitle){
         listItem.style.border = '2px solid hotpink'
         searchValues[ele] = true
       }
-      console.log(searchValues)
     })
     listItem.classList.add('searchFilterListItem')
     typeList.appendChild(listItem)
@@ -180,7 +179,7 @@ function renderSearchFilterListToSideBar(typeArr, listTitle){
 
 // Render one recipe to the DOM ------------------------------------------------
 function renderReciCard(reciObj){
-
+  // reciCard events and PopUp-------
   const reciCard = document.createElement('div')
   reciCard.addEventListener('mouseover',()=> {
     reciCard.style.border = '5px solid hotpink'
@@ -188,13 +187,74 @@ function renderReciCard(reciObj){
   reciCard.addEventListener('mouseout', ()=> {
     reciCard.style.border = '3px solid rgba(255, 255, 255, 0.856)'
   })
+  reciCard.addEventListener('click', ()=> {
+    const reciPopUp = document.createElement('div')
+    reciPopUp.classList.add('reciPopUp')
 
+
+    // Add Div for left side of PopUp
+    const reciPopUpLeftDiv = document.createElement('div')
+    // Add PopUp Image to left div
+    const reciPopUpImg = document.createElement('img')
+    reciPopUpImg.src = reciObj.recipe.images.LARGE.url
+    reciPopUpLeftDiv.appendChild(reciPopUpImg)
+    // Add Favorite Button to left div
+    const reciPopUpFavBtn = document.createElement('button')
+    reciPopUpFavBtn.textContent = ('Add To Favorites')
+    reciPopUpFavBtn.addEventListener('click', () => {
+      // Make this do stuff! 
+    })
+    reciPopUpLeftDiv.appendChild(reciPopUpFavBtn)
+    // Add Recipe Link Button to left div
+    const reciPopUpReciLinkBtn = document.createElement('button')
+    reciPopUpReciLinkBtn.textContent = ('View Recipe')
+    reciPopUpReciLinkBtn.addEventListener('click', () =>{
+      // Also Make this do stuff!!!
+    })
+    reciPopUpLeftDiv.appendChild(reciPopUpReciLinkBtn)
+        // Add Nutritional Information Button to left div
+    const reciPopUpReciNutriBtn = document.createElement('button')
+    reciPopUpReciNutriBtn.textContent = ('View Nutritional Information')
+    reciPopUpReciNutriBtn.addEventListener('click', () =>{
+      // Also, also Make this do stuff!!!!!!!!
+    })
+    reciPopUpLeftDiv.appendChild(reciPopUpReciNutriBtn)
+
+    // Add div for right side of popup
+    const reciPopUpRightDiv = document.createElement('div')
+    // Add div for top right
+    const reciPopUpTopRightDiv = document.createElement('div')
+    // Add Title to top right div
+    const reciPopUpTitle = document.createElement('h2')
+    reciPopUpTitle.textContent = reciObj.recipe.label
+    reciPopUpTopRightDiv.appendChild(reciPopUpTitle)
+    // Add Close button to top right div
+    const reciPopUpCloseBtn = document.createElement('button')
+    reciPopUpCloseBtn.textContent = ('X')
+    reciPopUpCloseBtn.addEventListener('click', ()=> {
+    reciPopUp.style.display = 'none'
+    })
+    reciPopUpTopRightDiv.appendChild(reciPopUpCloseBtn)
+    // Add ingredients list to right div
+    const reciPopUpIngList = document.createElement('ul')
+    for(let ele of reciObj.recipe.ingredientLines){
+      const listItem = document.createElement('li')
+      listItem.textContent = ele
+      reciPopUpIngList.appendChild(listItem)
+    }
+    reciPopUpRightDiv.appendChild(reciPopUpIngList)
+    // Stick It all Together
+    reciPopUpRightDiv.appendChild(reciPopUpTopRightDiv)
+    reciPopUp.appendChild(reciPopUpLeftDiv)
+    reciPopUp.appendChild(reciPopUpRightDiv)
+    reciMenu.appendChild(reciPopUp)
+  })
+  //--------------
 
   const reciCardInfo = document.createElement('div')
 
   const reciImg = document.createElement('img')
   reciImg.src = reciObj.recipe.images.REGULAR.url
-
 
   const reciTitle = document.createElement('h2')
   reciTitle.textContent = reciObj.recipe.label
@@ -213,7 +273,6 @@ function renderReciCard(reciObj){
   reciCardList.appendChild(reciCardListCuType)
   reciCardList.appendChild(reciCardListDietLab)
   reciCardList.appendChild(reciCardListHealthLab)
-
 
   const reciCardFoot = document.createElement('footer')
 
