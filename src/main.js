@@ -13,6 +13,7 @@ const healthLabelArr = ['alcohol-cocktail', 'alcohol-free', 'dairy-free', 'egg-f
 const dietLabelArr = ['balanced', 'high-fiber', 'high-protein', 'low-carb', 'low-fat', 'low-sodium']
 const searchValues = {}
 
+
 let reciDataArr = []
 
 //Initialise -----------------------------------------------
@@ -31,9 +32,42 @@ renderSearchFilterListToSideBar(dietLabelArr, 'Diet Labels')
 //----------------------------------------------------
 searchForm.addEventListener('submit', (event)=> {
   event.preventDefault()
+  clearRecipes()
   fetchReciSearch()
 })
 //---------------------------------------
+
+
+// Throttling for Infinite Scroll--------------------------------------------------
+
+let timeout
+let lastExecutionTime = 0
+const delay = 1000
+function throttledFetchReciSearch() {
+  const now = Date.now()
+  if (now - lastExecutionTime >= delay) {
+    lastExecutionTime = now
+    fetchReciSearch()
+    console.log('YES')
+  } else {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      lastExecutionTime = Date.now()
+    console.log('NO')
+    }, delay - (now - lastExecutionTime))
+  }
+}
+//-----------------------------------------------------
+
+//Infinite Scroll --------------------------------------------
+window.addEventListener('scroll', () => {
+  const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight
+  const loadPoint = (window.scrollY + 1200)
+  if(scrollableHeight < loadPoint){
+    console.log('Hey There')
+    throttledFetchReciSearch()
+}})
+//----------------------------------------------------
 
 // Fetch 20 random recipies and render them to the DOM ---------------------------------
 function fetchRandomRecipes() {
@@ -133,17 +167,21 @@ function fetchReciSearch(){
       searchURL += `&dishType=${ele}`
     }
   }
-// Fetch with searchURL
-fetch(searchURL)
-.then(resp => resp.json())
-.then(data => {
-  reciDataArr = data.hits
-  clearRecipes()
-  for(obj of reciDataArr){
-    renderReciCard(obj)
+// If no search parameters have been specified, perform random search.
+//If search parameters have been specified, fetch with searchURL
+if(specifiedSearchTerms.length === 0 && searchForm[0].value === ''){
+  fetchRandomRecipes()
+} else {
+    fetch(searchURL)
+    .then(resp => resp.json())
+    .then(data => {
+      reciDataArr = data.hits
+      for(obj of reciDataArr){
+        renderReciCard(obj)
+      }
+    })
+    .catch(error => console.error(`Fetch Error: ${error}`))
   }
-})
-.catch(error => console.error(`Fetch Error: ${error}`))
 }
 //-------------------------------------------------------------------------------
 
