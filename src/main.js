@@ -30,6 +30,8 @@ renderSearchFilterListToSideBar(dietLabelArr, 'Diet Labels')
 getFavoritesArrFromLocaStorage()
 if(myFavoriteRecipes[0] === null){
   myFavoriteRecipes = []
+} else if (myFavoriteRecipes === null){
+  myFavoriteRecipes = []
 }
 renderSavedFavorites()
 
@@ -573,7 +575,6 @@ function renderReciCard(reciObj){
   reciMenu.appendChild(reciCard)
 }
 //--------------------------------------------------------------------
-
 
 
 
