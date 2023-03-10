@@ -44,7 +44,7 @@ header h2{
 #searchBtn{
     background-color: rgba(0, 0, 0, 0.308);
     color: white;
-    height: 2.4vh;
+    height: 2.5vh;
     border: 2px solid #69cc00cc;
 
 }
@@ -55,6 +55,22 @@ header h2{
     flex-direction: row;
 }
 
+#favoritesSideBar{
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.397);
+    width: 20%;
+}
+#favoritesSideBar h2 {
+    text-align: center;
+    font-size: larger;
+    border: 2px solid rgba(255, 255, 255, 0.801);
+    width: 100%;
+}
+
 
 #filterSideBar{
     user-select: none;
@@ -63,8 +79,6 @@ header h2{
     align-items: center;
     color: white;
     background-color: rgba(0, 0, 0, 0.397);
-    /* border: 3px solid rgba(255, 255, 255, 0.795); */
-    /* order: -1; */
     width: 20%;
 }
 
@@ -262,3 +276,10 @@ margin: 1vmin;
     margin-bottom: 1vmin;
 }
 
+.reciFavCard{
+    border: 3px solid rgba(255, 255, 255, 0.856);
+    cursor: pointer;
+}
+.reciFavCard img{
+
+}

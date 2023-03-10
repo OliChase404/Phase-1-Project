@@ -1,3 +1,4 @@
+// const { json } = require("express")
 
 const BASE_URL = `https://api.edamam.com/api/recipes/v2`
 const RAND_RECI_URL = `https://api.edamam.com/api/recipes/v2?type=public&app_id=${R_API_ID}&app_key=${R_API_KEY}&imageSize=LARGE&random=true`
@@ -5,6 +6,7 @@ const RAND_RECI_URL = `https://api.edamam.com/api/recipes/v2?type=public&app_id=
 const searchForm = document.getElementById('searchForm')
 const reciMenu = document.getElementById('recipeMenu')
 const filterSideBar = document.getElementById('filterSideBar')
+const favoritesSideBar = document.getElementById('favoritesSideBar')
 
 const cuisineTypeArr = ['American', 'Asian', 'British', 'Caribbean', 'Central Europe', 'Chinese', 'Eastern Europe', 'French', 'Indian', 'Italian', 'Japanese', 'Kosher', 'Mediterranean', 'Mexican', 'Middle Eastern', 'Nordic', 'South American', 'South East Asian']
 const mealTypeArr = ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Teatime']
@@ -12,8 +14,7 @@ const dishTypeArr = ['Biscuits and cookies', 'Bread', 'Cereals', 'Condiments and
 const healthLabelArr = ['alcohol-cocktail', 'alcohol-free', 'dairy-free', 'egg-free', 'fish-free', 'gluten-free', 'keto-friendly', 'kosher', 'low-potassium', 'low-sugar', 'paleo', 'peanut-free', 'pescatarian', 'pork-free', 'red-meat-free', 'shellfish-free', 'soy-free', 'tree-nut-free', 'vegan', 'vegetarian']
 const dietLabelArr = ['balanced', 'high-fiber', 'high-protein', 'low-carb', 'low-fat', 'low-sodium']
 const searchValues = {}
-
-
+let myFavoriteRecipes = []
 let reciDataArr = []
 
 //Initialise -----------------------------------------------
@@ -26,18 +27,31 @@ renderSearchFilterListToSideBar(dishTypeArr, 'Dish Type')
 renderSearchFilterListToSideBar(healthLabelArr, 'Health Labels')
 renderSearchFilterListToSideBar(dietLabelArr, 'Diet Labels')
 
+getFavoritesArrFromLocaStorage()
+if(myFavoriteRecipes[0] === null){
+  myFavoriteRecipes = []
+}
+renderSavedFavorites()
+
+// getFavoriteRecipesFromLocalStorage()
+// console.log(myFavoriteRecipes)
+setTimeout(() => console.log(myFavoriteRecipes), 2000)
 
 //--------------------------------------------------
 
-//----------------------------------------------------
+// Search From Event Listeners------------------------------------------------
 searchForm.addEventListener('submit', (event)=> {
   event.preventDefault()
   clearRecipes()
   fetchReciSearch()
 })
+searchForm[1].addEventListener('mouseenter', ()=> {
+  searchForm[1].style.backgroundColor = ('hotpink')
+})
+searchForm[1].addEventListener('mouseleave',()=> {
+  searchForm[1].style.backgroundColor = ('rgba(0, 0, 0, 0.37)')
+})
 //---------------------------------------
-
-
 // Throttling for Infinite Scroll--------------------------------------------------
 
 let timeout
@@ -58,7 +72,6 @@ function throttledFetchReciSearch() {
   }
 }
 //-----------------------------------------------------
-
 //Infinite Scroll --------------------------------------------
 window.addEventListener('scroll', () => {
   const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight
@@ -85,7 +98,7 @@ function fetchRandomRecipes() {
 // Capitailise first character in a string----------------------------------------
 function capFirstChar(str) {
   return str[0].toUpperCase() + str.slice(1)
-  }
+}
 //-------------------------------------------------
 // Convert a string to title case--------------------------------------
 function toTitleCase(str){
@@ -100,7 +113,7 @@ function toTitleCase(str){
 function removeHyphens(str){
   let mappedWordArr = str.split('-')
   return mappedWordArr.join(' ')
-  }
+}
 //-----------------------------------------------------
 // Map a string and replace commas with space, hyphen, space--------------------------
 function removeCommas(str){
@@ -117,12 +130,156 @@ function sortSearchTermsByType(arr1, arr2, arr3){
   }
 }
 //---------------------------------------------
-//-----------------------------------------------------
+// Clear reciCards from the DOM---------------------------------------------
 function clearRecipes(){
   reciMenu.innerHTML = ''
 }
 //---------------------------------------------------
+// Get Favorites from Local Storage-----------------------------
+function getFavoritesArrFromLocaStorage(){
+  storedRecipesJson = localStorage.getItem('savedRecipes')
+  myFavoriteRecipes = JSON.parse(storedRecipesJson)
+}
+//-------------------------------------------------------
+// Save Updated myFavoriteRecipes aray to local storage
+function saveMyFavoriteRecipesToLocalStorage(){
+  localStorage.clear()
+  let myFavoriteRecipesJson = JSON.stringify(myFavoriteRecipes)
+  localStorage.setItem('savedRecipes', myFavoriteRecipesJson)
+}
+//-----------------------------------------------------
+// Render one recipe obj to Favorites SideBar ----------------------------------------
+function renderFavoriteRecipeToSideBar(reciObj){
+  // let favReciIndex = myFavoriteRecipes.findIndex((ele) => ele.recipe.url === reciObj.recipe.url)
+  const reciFavCard = document.createElement('div')
+  reciFavCard.classList.add('reciFavCard')
+  const reciFavCardImg = document.createElement('img')
+  reciFavCardImg.src = reciObj.recipe.images.SMALL.url
+  reciFavCard.appendChild(reciFavCardImg)
+  reciFavCard.addEventListener('mouseover',()=> {
+    reciFavCard.style.border = '5px solid hotpink'
+  })
+  reciFavCard.addEventListener('mouseout', ()=> {
+    reciFavCard.style.border = '3px solid rgba(255, 255, 255, 0.856)'
+  })
+  
+  reciFavCard.addEventListener('click', () => {
+    const reciPopUp = document.createElement('div')
+    reciPopUp.classList.add('reciPopUp')
+    //--------
+    // Add Div for left side of PopUp
+    const reciPopUpLeftDiv = document.createElement('div')
+    reciPopUpLeftDiv.classList.add('reciPopUpLeftDiv')
+    //--------
+    // Add PopUp Image to left div
+    const reciPopUpImg = document.createElement('img')
+    reciPopUpImg.src = reciObj.recipe.images.LARGE.url
+    reciPopUpImg.classList.add('reciPopUpImg')
+    reciPopUpLeftDiv.appendChild(reciPopUpImg)
+    //--------
+    // Add Favorite Button to left div
+    const reciPopUpFavBtn = document.createElement('button')
+    reciPopUpFavBtn.textContent = ('Remove From Favorites')
+    reciPopUpFavBtn.addEventListener('click', reciPopUpFavBtnHandleCLick)
+    function reciPopUpFavBtnHandleCLick(){
+      let favReciIndex = myFavoriteRecipes.findIndex((ele) => ele.recipe.url === reciObj.recipe.url)
+      console.log(favReciIndex)
+      myFavoriteRecipes.splice(favReciIndex, 1)
+      reciFavCard.style.display = ('none')
+      saveMyFavoriteRecipesToLocalStorage()
+      reciPopUpFavBtn.textContent = ('Removed')
+      reciPopUpFavBtn.removeEventListener('click', reciPopUpFavBtnHandleCLick)
+      reciPopUpFavBtn.removeEventListener('mouseleave', reciPopUpFavBtnMouseLeaveHandler)
+    }
+    reciPopUpFavBtn.addEventListener('mouseenter', ()=> {
+      reciPopUpFavBtn.style.backgroundColor = ('hotpink')
+    })
+    reciPopUpFavBtn.addEventListener('mouseleave', reciPopUpFavBtnMouseLeaveHandler)
+    function reciPopUpFavBtnMouseLeaveHandler(){
+      reciPopUpFavBtn.style.backgroundColor = ('rgba(0, 0, 0, 0.37)')
+    }
 
+    reciPopUpLeftDiv.appendChild(reciPopUpFavBtn)
+    //--------
+    // Add Recipe Link Button to left div
+    const reciPopUpReciLinkBtn = document.createElement('button')
+    reciPopUpReciLinkBtn.textContent = ('View Recipe')
+    reciPopUpReciLinkBtn.addEventListener('click', () =>{
+      window.open(reciObj.recipe.url)
+    })
+    reciPopUpReciLinkBtn.addEventListener('mouseenter', ()=> {
+      reciPopUpReciLinkBtn.style.backgroundColor = ('hotpink')
+    })
+    reciPopUpReciLinkBtn.addEventListener('mouseleave',()=> {
+      reciPopUpReciLinkBtn.style.backgroundColor = ('rgba(0, 0, 0, 0.37)')
+    })
+    reciPopUpLeftDiv.appendChild(reciPopUpReciLinkBtn)
+        // Add Nutritional Information Button to left div
+    const reciPopUpReciNutriBtn = document.createElement('button')
+    reciPopUpReciNutriBtn.textContent = ('View Nutritional Information')
+    reciPopUpReciNutriBtn.addEventListener('click', () =>{
+      // Also, also Make this do stuff!!!!!!!!
+    })
+    reciPopUpReciNutriBtn.addEventListener('mouseenter', ()=> {
+      reciPopUpReciNutriBtn.style.backgroundColor = ('hotpink')
+    })
+    reciPopUpReciNutriBtn.addEventListener('mouseleave',()=> {
+      reciPopUpReciNutriBtn.style.backgroundColor = ('rgba(0, 0, 0, 0.37)')
+    })
+    reciPopUpLeftDiv.appendChild(reciPopUpReciNutriBtn)
+    // Add div for right side of popup
+    const reciPopUpRightDiv = document.createElement('div')
+    reciPopUpRightDiv.classList.add('reciPopUpRightDiv')
+    // Add div for top right
+    const reciPopUpTopRightDiv = document.createElement('div')
+    reciPopUpTopRightDiv.classList.add('reciPopUpTopRightDiv')
+    // Add Title to top right div
+    const reciPopUpTitle = document.createElement('h2')
+    reciPopUpTitle.textContent = toTitleCase(reciObj.recipe.label)
+    reciPopUpTopRightDiv.appendChild(reciPopUpTitle)
+    // Add Close button to top right div
+    const reciPopUpCloseBtn = document.createElement('button')
+    reciPopUpCloseBtn.textContent = ('X')
+    reciPopUpCloseBtn.addEventListener('click', ()=> {
+    reciPopUp.style.display = 'none'
+    })
+    reciPopUpCloseBtn.addEventListener('mouseenter', ()=>{
+      reciPopUpCloseBtn.style.backgroundColor = 'hotpink'
+    })
+    reciPopUpCloseBtn.addEventListener('mouseleave', ()=> {
+      reciPopUpCloseBtn.style.backgroundColor = 'rgba(0, 0, 0, 0.329)'
+    })
+    reciPopUpTopRightDiv.appendChild(reciPopUpCloseBtn)
+    // Add ingredients list to right div
+    const reciPopUpIngList = document.createElement('ul')
+    for(let ele of reciObj.recipe.ingredientLines){
+      const listItem = document.createElement('li')
+      listItem.textContent = ele
+      reciPopUpIngList.appendChild(listItem)
+    }
+    // Add caption to Ingredients List
+    const reciPopUpIngListCaption = document.createElement('caption')
+    reciPopUpIngListCaption.textContent = ('Ingredients List')
+    reciPopUpIngList.prepend(reciPopUpIngListCaption)
+    // Stick It all Together
+    reciPopUpRightDiv.appendChild(reciPopUpTopRightDiv)
+    reciPopUpRightDiv.appendChild(reciPopUpIngList)
+    reciPopUp.appendChild(reciPopUpLeftDiv)
+    reciPopUp.appendChild(reciPopUpRightDiv)
+    reciMenu.appendChild(reciPopUp)
+  })
+  
+
+  favoritesSideBar.appendChild(reciFavCard)
+}
+//------------------------------------------------
+// Render favorites in local storage to sidebar-------------------------------------------
+function renderSavedFavorites(){
+  for(obj of myFavoriteRecipes){
+    renderFavoriteRecipeToSideBar(obj)
+  }
+}
+//-------------------------------------------------------------------
 // Run Search with user specified parameters -------------------------------------------------
 function fetchReciSearch(){
   let searchURL = `${BASE_URL}?type=public&beta=false`
@@ -201,7 +358,6 @@ if(specifiedSearchTerms.length === 0 && searchForm[0].value === ''){
   }
 }
 //-------------------------------------------------------------------------------
-
 // Render Side Bar Text----------------------------------------------------------------
 function renderSearchFilterListToSideBar(typeArr, listTitle){
   const typeList = document.createElement('ul')
@@ -260,15 +416,26 @@ function renderReciCard(reciObj){
     // Add Favorite Button to left div
     const reciPopUpFavBtn = document.createElement('button')
     reciPopUpFavBtn.textContent = ('Add To Favorites')
-    reciPopUpFavBtn.addEventListener('click', () => {
-      // Make this do stuff! 
-    })
+    
+    reciPopUpFavBtn.addEventListener('click', reciPopUpFavBtnClick)
+    function reciPopUpFavBtnClick(){
+      myFavoriteRecipes.push(reciObj)
+      saveMyFavoriteRecipesToLocalStorage()
+      renderFavoriteRecipeToSideBar(reciObj)
+      reciPopUpFavBtn.textContent = ('Added')
+      reciPopUpFavBtn.removeEventListener('click', reciPopUpFavBtnClick)
+      reciPopUpFavBtn.removeEventListener('mouseleave', reciPopUpFavBtnMouseLeave)
+    }
     reciPopUpFavBtn.addEventListener('mouseenter', ()=> {
       reciPopUpFavBtn.style.backgroundColor = ('hotpink')
     })
-    reciPopUpFavBtn.addEventListener('mouseleave',()=> {
+    
+    reciPopUpFavBtn.addEventListener('mouseleave', reciPopUpFavBtnMouseLeave)
+    function reciPopUpFavBtnMouseLeave(){
       reciPopUpFavBtn.style.backgroundColor = ('rgba(0, 0, 0, 0.37)')
-    })
+    }
+
+
     reciPopUpLeftDiv.appendChild(reciPopUpFavBtn)
     //--------
     // Add Recipe Link Button to left div
@@ -395,7 +562,6 @@ function renderReciCard(reciObj){
   reciMenu.appendChild(reciCard)
 }
 //--------------------------------------------------------------------
-
 
 
 
