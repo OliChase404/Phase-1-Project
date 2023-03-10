@@ -28,16 +28,23 @@ renderSearchFilterListToSideBar(healthLabelArr, 'Health Labels')
 renderSearchFilterListToSideBar(dietLabelArr, 'Diet Labels')
 
 getFavoritesArrFromLocaStorage()
+
 if(myFavoriteRecipes[0] === null){
   myFavoriteRecipes = []
 } else if (myFavoriteRecipes === null){
   myFavoriteRecipes = []
 }
+
 renderSavedFavorites()
 
-// getFavoriteRecipesFromLocalStorage()
-// console.log(myFavoriteRecipes)
-setTimeout(() => console.log(myFavoriteRecipes), 2000)
+setTimeout(() => {
+  if(myFavoriteRecipes[0] === null){
+    myFavoriteRecipes = []
+  } else if (myFavoriteRecipes === null){
+    myFavoriteRecipes = []
+  }
+  console.log(myFavoriteRecipes),
+  2000})
 
 //--------------------------------------------------
 

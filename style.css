@@ -23,6 +23,7 @@ header h1{
     font-family: 'Great Vibes', cursive;
     font-size: 6vmin;
     margin-bottom: 1vmin;
+    user-select: none;
 
 }
 header h2{
@@ -30,6 +31,7 @@ header h2{
     margin: 0;
     font-family: 'Great Vibes', cursive;
     font-weight: lighter;
+    user-select: none;
 }
 
 #search{
@@ -121,6 +123,7 @@ header h2{
     margin-bottom: 2vmin;
     display: flex;
     flex-direction: row;
+    user-select: none;
 }
 
 .reciCardInfo {
@@ -187,6 +190,7 @@ border: 2px solid rgba(255, 255, 255, 0.801);
     z-index: 9999;
     height: 70vh;
     width: 70vw;
+    user-select: none;
 }
 
 
@@ -268,17 +272,42 @@ border: 2px solid rgba(255, 255, 255, 0.801);
     font-size: x-large;
 }
 
+
+
+
 .reciPopUpRightDiv ul{
-list-style: square;
-font-size: 1.5vmin;
-background-color: rgba(0, 0, 0, 0.253);
-border-radius: 10%;
-vertical-align: middle;
-margin: 1vmin;
+    list-style: square;
+    font-size: 1.5vmin;
+    background-color: rgba(0, 0, 0, 0.253);
+    border-radius: 5%;
+    vertical-align: middle;
+    margin: 1vmin;
+    position: absolute;
+    top: 18%;
+    left: 50%;
+    right: 0;
+    bottom: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* flex-grow: 1; */
+    /* height: 55vh; */
 }
+    .reciPopUpRightDiv ul::-webkit-scrollbar {
+        width: 10px; /* set the width of the scrollbar */
+    }
+    .reciPopUpRightDiv ul::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.486); /* set the background color of the scrollbar track */
+    }
+    .reciPopUpRightDiv ul::-webkit-scrollbar-thumb {
+        background: rgba(255, 105, 180, 0.76); /*set the color of the scrollbar thumb*/
+    }
+    .reciPopUpRightDiv ul::-webkit-scrollbar-thumb:hover {
+        background: hotpink; /* set the color of the scrollbar thumb when hovered */
+    }
+
 
 .reciPopUpRightDiv li{
-    margin-bottom: 1vmin;
+    margin-bottom: 0.8vmin;
 }
 
 .reciFavCard{
