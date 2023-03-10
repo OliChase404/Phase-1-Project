@@ -22,7 +22,7 @@ header h1{
     /* font-family: 'Tilt Prism', cursive; */
     font-family: 'Great Vibes', cursive;
     font-size: 6vmin;
-    margin: 1vmin;
+    margin-bottom: 1vmin;
 
 }
 header h2{
@@ -53,6 +53,10 @@ header h2{
 #main{
     display: flex;
     flex-direction: row;
+    width: 100%;
+}
+#recipeMenu{
+    width: 60%;
 }
 
 #favoritesSideBar{
@@ -69,6 +73,7 @@ header h2{
     font-size: larger;
     border: 2px solid rgba(255, 255, 255, 0.801);
     width: 100%;
+
 }
 
 
@@ -197,7 +202,7 @@ border: 2px solid rgba(255, 255, 255, 0.801);
     object-fit: contain;
     border: 3px solid white;
     max-width: 100%;
-    /* max-height: 50%; */
+    max-height: 50%;
     margin: 0;
     padding: 0;
 }
@@ -277,9 +282,9 @@ margin: 1vmin;
 }
 
 .reciFavCard{
-    border: 3px solid rgba(255, 255, 255, 0.856);
-    cursor: pointer;
 }
 .reciFavCard img{
+    border: 3px solid rgba(255, 255, 255, 0.856);
+    cursor: pointer;
 
 }

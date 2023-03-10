@@ -62,12 +62,12 @@ function throttledFetchReciSearch() {
   if (now - lastExecutionTime >= delay) {
     lastExecutionTime = now
     fetchReciSearch()
-    console.log('YES')
+    console.log('Fine...')
   } else {
     clearTimeout(timeout)
     timeout = setTimeout(() => {
       lastExecutionTime = Date.now()
-    console.log('NO')
+    console.log('Nope.')
     }, delay - (now - lastExecutionTime))
   }
 }
@@ -77,7 +77,7 @@ window.addEventListener('scroll', () => {
   const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight
   const loadPoint = (window.scrollY + 1200)
   if(scrollableHeight < loadPoint){
-    console.log('Hey There')
+    console.log('More!')
     throttledFetchReciSearch()
 }})
 //----------------------------------------------------
@@ -148,21 +148,26 @@ function saveMyFavoriteRecipesToLocalStorage(){
   localStorage.setItem('savedRecipes', myFavoriteRecipesJson)
 }
 //-----------------------------------------------------
+// Render favorites in local storage to sidebar-------------------------------------------
+function renderSavedFavorites(){
+  for(obj of myFavoriteRecipes){
+    renderFavoriteRecipeToSideBar(obj)
+  }
+}
+//-------------------------------------------------------------------
 // Render one recipe obj to Favorites SideBar ----------------------------------------
 function renderFavoriteRecipeToSideBar(reciObj){
-  // let favReciIndex = myFavoriteRecipes.findIndex((ele) => ele.recipe.url === reciObj.recipe.url)
   const reciFavCard = document.createElement('div')
   reciFavCard.classList.add('reciFavCard')
   const reciFavCardImg = document.createElement('img')
   reciFavCardImg.src = reciObj.recipe.images.SMALL.url
   reciFavCard.appendChild(reciFavCardImg)
   reciFavCard.addEventListener('mouseover',()=> {
-    reciFavCard.style.border = '5px solid hotpink'
+    reciFavCardImg.style.border = '5px solid hotpink'
   })
   reciFavCard.addEventListener('mouseout', ()=> {
-    reciFavCard.style.border = '3px solid rgba(255, 255, 255, 0.856)'
+    reciFavCardImg.style.border = '3px solid rgba(255, 255, 255, 0.856)'
   })
-  
   reciFavCard.addEventListener('click', () => {
     const reciPopUp = document.createElement('div')
     reciPopUp.classList.add('reciPopUp')
@@ -173,7 +178,13 @@ function renderFavoriteRecipeToSideBar(reciObj){
     //--------
     // Add PopUp Image to left div
     const reciPopUpImg = document.createElement('img')
-    reciPopUpImg.src = reciObj.recipe.images.LARGE.url
+    if(reciObj.recipe.images.LARGE !== undefined){
+      reciPopUpImg.src = reciObj.recipe.images.LARGE.url
+    } else if(reciObj.recipe.images.REGULAR !== undefined){
+      reciPopUpImg.src = reciObj.recipe.images.REGULAR.url
+    }else if(reciObj.recipe.images.SMALL !== undefined){
+      reciPopUpImg.src = reciObj.recipe.images.REGULAR.url
+    }
     reciPopUpImg.classList.add('reciPopUpImg')
     reciPopUpLeftDiv.appendChild(reciPopUpImg)
     //--------
@@ -198,7 +209,6 @@ function renderFavoriteRecipeToSideBar(reciObj){
     function reciPopUpFavBtnMouseLeaveHandler(){
       reciPopUpFavBtn.style.backgroundColor = ('rgba(0, 0, 0, 0.37)')
     }
-
     reciPopUpLeftDiv.appendChild(reciPopUpFavBtn)
     //--------
     // Add Recipe Link Button to left div
@@ -268,18 +278,10 @@ function renderFavoriteRecipeToSideBar(reciObj){
     reciPopUp.appendChild(reciPopUpRightDiv)
     reciMenu.appendChild(reciPopUp)
   })
-  
 
   favoritesSideBar.appendChild(reciFavCard)
 }
 //------------------------------------------------
-// Render favorites in local storage to sidebar-------------------------------------------
-function renderSavedFavorites(){
-  for(obj of myFavoriteRecipes){
-    renderFavoriteRecipeToSideBar(obj)
-  }
-}
-//-------------------------------------------------------------------
 // Run Search with user specified parameters -------------------------------------------------
 function fetchReciSearch(){
   let searchURL = `${BASE_URL}?type=public&beta=false`
@@ -341,6 +343,9 @@ function fetchReciSearch(){
       searchURL += `&dishType=${ele}`
     }
   }
+  // Randomises Search Results to Limit Repetition
+  searchURL += '&random=true' 
+
 // If no search parameters have been specified, perform random search.
 //If search parameters have been specified, fetch with searchURL
 if(specifiedSearchTerms.length === 0 && searchForm[0].value === ''){
@@ -409,7 +414,13 @@ function renderReciCard(reciObj){
     //--------
     // Add PopUp Image to left div
     const reciPopUpImg = document.createElement('img')
-    reciPopUpImg.src = reciObj.recipe.images.LARGE.url
+    if(reciObj.recipe.images.LARGE !== undefined){
+      reciPopUpImg.src = reciObj.recipe.images.LARGE.url
+    } else if(reciObj.recipe.images.REGULAR !== undefined){
+      reciPopUpImg.src = reciObj.recipe.images.REGULAR.url
+    }else if(reciObj.recipe.images.SMALL !== undefined){
+      reciPopUpImg.src = reciObj.recipe.images.REGULAR.url
+    }
     reciPopUpImg.classList.add('reciPopUpImg')
     reciPopUpLeftDiv.appendChild(reciPopUpImg)
     //--------
